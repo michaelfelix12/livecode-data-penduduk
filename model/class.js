@@ -1,4 +1,5 @@
-class Population {
+//Class
+export class Population {
     constructor(
       id,
       name,
@@ -20,5 +21,21 @@ class Population {
       this.CityId = CityId;
       this.districtId = districtId;
     }
-  }
+}
+
+export class Nik {
+    constructor(
+      nikProvinceId,
+      nikCityId,
+      nikDistrictId,
+      nikBirthDate,
+      nikRandomDigits
+    ) {
+      this.nikProvinceId = nikProvinceId;
+      this.nikCityId = nikCityId;
+      this.nikDistrictId = nikDistrictId;
+      this.nikBirthDate = nikBirthDate;
+      this.nikRandomDigits = nikRandomDigits;
+    }
+}
   
