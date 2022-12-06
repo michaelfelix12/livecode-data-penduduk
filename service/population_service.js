@@ -5,28 +5,28 @@ class PopulationService {
       this.population = []
       this.idNumb = []
     }
-    generateNik(nik) {
-        return new Promise((resolve, reject) => {
+    generateNik(nikProvinceId, nikCityId, nikDistrictId, nikTanggalLahir, increment) {
             console.log('Memproses pembuatan NIK...')
-            setTimeout(() => {
+            let nik = nikProvinceId + nikCityId + nikDistrictId + nikTanggalLahir + increment
                 if (!nik) {
-                    reject('NIK gagal dibuat')
+                    return('NIK gagal dibuat')
                 } else {
                     //generating NIK
                     this.idNumb.push(nik)
-                    resolve(`${nik}`)
+                    return(`${nik}`)
                 }
-            }, 5000)
-        })
     }
   
     registerOrang(orang) {
         return new Promise((resolve, reject) => {
             console.log('Memproses registrasi penduduk...')
             setTimeout(() => {
+                // const {id, name, gender, nik, birthDate, placeOfBirth, provinceId, CityId, districtId} = orang
                 if (!orang) {
                     reject('Penduduk baru gagal diregistrasi')
                 } else {
+                    let iniNik = this.generateNik(orang.provinceId, orang.CityId, orang.districtId, '990242','0001')
+                    console.log(iniNik)
                     this.population.push(orang)
                     resolve(`Penduduk baru berhasil diregistrasi`)
                 }
@@ -78,22 +78,31 @@ class PopulationService {
                 // validasi jam kerja
                 if (jamLayanan >= 8 && jamLayanan <= 14){
                     console.log('Daftar Registrasi Penduduk Baru')
-                    let nikBulanSutisna = await this.generateNik('19'+'20'+'02'+'990242'+'0001')
-                    console.log(nikBulanSutisna)
 
-                    let bulanSutisna = new Population('P0001', 'Bulan Sutisna', 'Perempuan', `${nikBulanSutisna}`, 
+                    // let nikBulanSutisna = await this.generateNik(19, 20, '02', 990242, '0001')
+                    // console.log(nikBulanSutisna)
+
+                    let bulanSutisna = new Population('P0001', 'Bulan Sutisna', 'Perempuan', '', 
                                                     '1999-02-02', 'Jakarta Barat', 19, 20, '02')
-                    let orangBaru = await this.registerOrang(bulanSutisna)
-                    console.log(orangBaru)
+                    await this.registerOrang(bulanSutisna)
+                    // let orangBaru = await this.registerOrang(bulanSutisna)
+                    // console.log(orangBaru)
 
                     let semuaPenduduk = await this.getAll()
-                    console.log(semuaPenduduk)
+                    // console.log(semuaPenduduk)
+
+                    console.log('Data Penduduk:\n', `ID: ${bulanSutisna.id}\n`, 
+                                `Nama Lengkap: ${bulanSutisna.name}\n`, 
+                                `NIK: ${bulanSutisna.nik}\n`, 
+                                `Tempat, Tanggal Lahir: ${bulanSutisna.placeOfBirth}, ${bulanSutisna.birthDate}`)
 
                     let spesifikPenduduk = await this.getByNIK(1920029902420001)
                     console.log(spesifikPenduduk)
                 } else {
                     console.log('Layanan Pembuatan KTP Sudah tutup')
                 }
+            } else {
+                console.log('Layanan Pembuatan KTP hanya Senin-Jumat')
             }
         } catch (error) {
             console.log(error)
